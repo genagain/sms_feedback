@@ -42,13 +42,12 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 @app.route('/')
 def hello_monkey():
     """Respond to incoming texts with a simple text message and store said text in a database."""
-    random_gif = random.choice(gif_urls)
     content = request.values.get('Body', None)
     feedback = Feedback(content)
     db.session.add(feedback)
     db.session.commit()
     resp = MessagingResponse()
-    msg = Message().body('Thank you for your feedback! - Gen').media(random_gif)
+    msg = Message().body('Thank you for your feedback! - Gen').media('https://giphy.com/gifs/TlK63EXvLD0en57UJDa')
     resp.append(msg)
     return str(resp)
 
