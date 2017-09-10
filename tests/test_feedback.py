@@ -1,6 +1,10 @@
 from app.server import app
 from app.server import Feedback
+
+import os
 import pytest
+
+os.environ['DATABASE_URL'] = 'postgres://localhost/sms_feedback_test'
 
 def test_thank_you():
     test_client = app.test_client()
