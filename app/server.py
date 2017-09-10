@@ -7,11 +7,11 @@ from twilio.twiml.messaging_response import MessagingResponse, Message
 
 app = Flask(__name__)
 # TODO: create app based on environment specific configurations for dev, testing and production
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://localhost/sms_feedback_development'
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 
 db = SQLAlchemy(app)
 
+# TODO make own models file without circular imports
 class Feedback(db.Model):
     __table__name = "feedback"
     id = db.Column(db.Integer, primary_key=True)
@@ -34,7 +34,7 @@ def hello_monkey():
     db.session.commit()
     resp = MessagingResponse()
     # TODO have a number of GIFs that are selected randomly for the media part
-    msg = Message().body('Thank you for your feedback! - Gen').media('https://demo.twilio.com/owl.png')
+    msg = Message().body('Thank you for your feedback! - Gen').media('https://media.giphy.com/media/3oz8xIsloV7zOmt81G/giphy.gif')
     resp.append(msg)
     return str(resp)
 
