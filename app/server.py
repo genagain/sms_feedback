@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, render_template, request
 from flask.ext.sqlalchemy import SQLAlchemy
 
@@ -5,7 +7,8 @@ from twilio.twiml.messaging_response import MessagingResponse, Message
 
 app = Flask(__name__)
 # TODO: create app based on environment specific configurations for dev, testing and production
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://localhost/sms_feedback_development'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://localhost/sms_feedback_development'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 
 db = SQLAlchemy(app)
 
