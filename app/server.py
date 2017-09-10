@@ -1,5 +1,7 @@
 import os
 import random
+import sys
+import logging
 
 from flask import Flask, render_template, request
 from flask.ext.sqlalchemy import SQLAlchemy
@@ -10,6 +12,11 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 
 db = SQLAlchemy(app)
+
+
+if 'DYNO' in os.environ:
+    app.logger.addHandler(logging.StreamHandler(sys.stdout))
+    app.logger.setLevel(logging.ERROR)
 
 gif_urls = [
     'https://giphy.com/gifs/3oz8xIsloV7zOmt81G',
