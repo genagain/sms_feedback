@@ -3,7 +3,7 @@ import random
 import sys
 import logging
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
 from flask.ext.sqlalchemy import SQLAlchemy
 
 from twilio.twiml.messaging_response import MessagingResponse, Message
@@ -38,7 +38,6 @@ class Feedback(db.Model):
 # To suppress the warning
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
-# Make this a POST route instead
 @app.route('/')
 def hello_monkey():
     """Respond to incoming texts with a simple text message and store said text in a database."""
@@ -47,9 +46,16 @@ def hello_monkey():
     db.session.add(feedback)
     db.session.commit()
     resp = MessagingResponse()
-    msg = Message().body('Thank you for your feedback! - Gen') # .media('https://giphy.com/gifs/TlK63EXvLD0en57UJDa')
+    msg = Message().body('Thank you for your feedback! - Gen').media('/gif')
     resp.append(msg)
     return str(resp)
+
+@app.route('/gif')
+def get_gif():
+    gif_number = random.randint(1, 8)
+    gif_filepath = 'static/thank_you_{}.gif'.format(gif_number)
+    return send_file(gif_filepath, mimetype='image/gif')
+
 
 
 if __name__ == '__main__':
