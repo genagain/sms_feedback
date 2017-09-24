@@ -46,7 +46,7 @@ def hello_monkey():
     db.session.add(feedback)
     db.session.commit()
     resp = MessagingResponse()
-    msg = Message().body('Thank you for your feedback! - Gen').media('/gif')
+    msg = Message().body('Thank you for your feedback! - Gen') #.media('/gif')
     resp.append(msg)
     return str(resp)
 
