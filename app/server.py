@@ -15,17 +15,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 
 db = SQLAlchemy(app)
 
-
 if 'DYNO' in os.environ:
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.ERROR)
-
-gif_urls = [
-    'https://giphy.com/gifs/3oz8xIsloV7zOmt81G',
-    'https://giphy.com/gifs/TlK63EXvLD0en57UJDa',
-    'https://giphy.com/gifs/IcGkqdUmYLFGE',
-    'https://giphy.com/gifs/26FPOogenQv5eOZHO'
-]
 
 # TODO make own models file without circular imports
 class Feedback(db.Model):
@@ -36,6 +28,12 @@ class Feedback(db.Model):
     def __init__(self, content):
         self.content = content
 
+gif_media_urls = [
+    'https://media.giphy.com/media/xUA7aN1MTCZx97V1Ic/giphy.gif',
+    'https://media.giphy.com/media/3o6EhHMGNWQW1WEt7q/giphy.gif',
+    'https://media.giphy.com/media/3oz8xIsloV7zOmt81G/giphy.gif',
+    'https://media.giphy.com/media/6tHy8UAbv3zgs/giphy.gif'
+]
 
 # To suppress the warning
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -52,8 +50,12 @@ def hello_monkey():
     data_dict = json.loads(response.text)
     random_gifs =[ gif['url'] for gif in data_dict['data'] ]
     gif = random_gifs.pop()
+    url_end = re.search(r'\/gifs\/.+$', gif).group()
+    slug = url_end.replace('/gifs/', '')
+    media_url = 'http://media.giphy.com/media/{}'.format(slug)
+    random_media_url = random.choice(gif_media_urls)
     resp = MessagingResponse()
-    msg = Message().body('Thank you for your feedback! - Gen').media('https://media.giphy.com/media/xUA7aN1MTCZx97V1Ic/giphy.gif')
+    msg = Message().body('Thank you for your feedback! - Gen').media(random_media_url)
     resp.append(msg)
     return str(resp)
 
