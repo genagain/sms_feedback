@@ -46,14 +46,6 @@ def hello_monkey():
     feedback = Feedback(content)
     db.session.add(feedback)
     db.session.commit()
-    api_key = os.environ['API_KEY']
-    response = requests.get('http://api.giphy.com/v1/gifs/search?api_key={}&q=thankyou'.format(api_key))
-    data_dict = json.loads(response.text)
-    random_gifs =[ gif['url'] for gif in data_dict['data'] ]
-    gif = random_gifs.pop()
-    url_end = re.search(r'\/gifs\/.+$', gif).group()
-    slug = url_end.replace('/gifs/', '')
-    media_url = 'http://media.giphy.com/media/{}'.format(slug)
     random_media_url = random.choice(gif_media_urls)
     resp = MessagingResponse()
     msg = Message().body('Thank you for your feedback! - Gen').media(random_media_url)
