@@ -2,6 +2,8 @@ import os
 import random
 import sys
 import logging
+import requests
+import json
 
 from flask import Flask, render_template, request, send_file
 from flask.ext.sqlalchemy import SQLAlchemy
@@ -45,8 +47,13 @@ def hello_monkey():
     feedback = Feedback(content)
     db.session.add(feedback)
     db.session.commit()
+    api_key = os.environ['API_KEY']
+    response = requests.get('https://api.giphy.com/v1/gifs/search?api_key={}&q=thankyou'.format(api_key))
+    data_dict = json.loads(response.text)
+    gif_urls = map(lambda gif: gif['url'], data_dict['data'])  
+    random_gif = random.sample(gif_urls, 1).pop()
     resp = MessagingResponse()
-    msg = Message().body('Thank you for your feedback! - Gen') #.media('/gif')
+    msg = Message().body('Thank you for your feedback! - Gen').media(random_gif)
     resp.append(msg)
     return str(resp)
 
