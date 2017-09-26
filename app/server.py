@@ -50,9 +50,9 @@ def hello_monkey():
     api_key = os.environ['API_KEY']
     response = requests.get('http://api.giphy.com/v1/gifs/search?api_key={}&q=thankyou'.format(api_key))
     data_dict = json.loads(response.text)
-    random_gif = map(lambda gif: gif['url'], data_dict['data']).pop()
+    random_gifs = map(lambda gif: gif['url'], data_dict['data'])
     resp = MessagingResponse()
-    msg = Message().body('Thank you for your feedback! - Gen').media(random_gif)
+    msg = Message().body('Thank you for your feedback! - Gen').media(random_gifs.pop())
     resp.append(msg)
     return str(resp)
 
