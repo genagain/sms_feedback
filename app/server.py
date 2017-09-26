@@ -53,7 +53,7 @@ def hello_monkey():
     random_gifs =[ gif['url'] for gif in data_dict['data'] ]
     gif = random_gifs.pop()
     resp = MessagingResponse()
-    msg = Message().body('Thank you for your feedback! - Gen').media(gif)
+    msg = Message().body('Thank you for your feedback! - Gen').media('https://media.giphy.com/media/xUA7aN1MTCZx97V1Ic/giphy.gif')
     resp.append(msg)
     return str(resp)
 
